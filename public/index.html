@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ChatClient</title>
+        <style>
+            .red {color: red;}
+        </style>
+    </head>
+    <body>
+        <h1>Simple Chat Client 
+
+        <hr>
+
+        <div id="list">
+
+        </div>
+
+        <hr>
+
+        <div>
+            <input type="text" id="msg" value="h1~">
+            <button id="btnSend" onclick="send()">Send</button>
+        </div>
+
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();  
+
+            socket.on('connect', function(){
+                console.log("connected");
+              
+            });
+
+            socket.on('message', function(data){                
+                let msg = data.msg;
+
+                $('div#list').append(`<div><strong>other: ${msg}</strong></div>`);
+            });
+
+            function send(){
+                let msg = $('#msg').val();
+                $('div#list').append(`<div>me: ${msg}</div>`);
+                socket.emit('message', {msg: msg});
+            }
+
+        </script>
+    </body>
+</html>
